@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Il Dilemma del Riformatore | Knowledge Lab</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --avorio: #FBF9F1;
+            --navy: #112D4E;
+            --navy-light: #3F72AF;
+            --legno: #8B5E34;
+            --success: #28a745;
+            --danger: #dc3545;
+        }
+
+        body {
+            background-color: var(--avorio);
+            font-family: 'Montserrat', sans-serif;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3 { font-family: 'Lora', serif; }
+
+        .game-header {
+            background: linear-gradient(rgba(17, 45, 78, 0.9), rgba(17, 45, 78, 0.9)), url('https://images.unsplash.com/photo-1585036156171-383f24ad0e49?auto=format&fit=crop&q=80&w=1000') center/cover;
+            color: white;
+            padding: 3rem 0;
+            border-bottom: 4px solid var(--legno);
+            margin-bottom: 2rem;
+        }
+
+        .scenario-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            max-width: 900px;
+            margin: 0 auto;
+            border-top: 8px solid var(--legno);
+        }
+
+        .persona-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: var(--navy);
+            color: white;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .choice-btn {
+            width: 100%;
+            text-align: left;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            background: #fdfdfd;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            font-size: 1rem;
+        }
+
+        .choice-btn:hover {
+            border-color: var(--navy-light);
+            background: var(--avorio);
+            transform: translateX(10px);
+        }
+
+        .choice-btn.correct { background: #d4edda; border-color: var(--success); color: #155724; }
+        .choice-btn.wrong { background: #f8d7da; border-color: var(--danger); color: #721c24; }
+
+        .progress-text { font-size: 0.9rem; color: #666; }
+        
+        #feedback-area {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-header text-center">
+    <div class="container">
+        <a href="minigiochi.html" class="btn btn-outline-light btn-sm float-start">Abbandona</a>
+        <h1>Il Dilemma del Riformatore</h1>
+        <p class="opacity-75">Scegli la via della coerenza storica.</p>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="scenario-card">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="progress-text">Scenario <span id="current-idx">1</span> di 10</div>
+            <div class="fw-bold">Coerenza: <span id="score">0</span>%</div>
+        </div>
+
+        <div id="game-ui">
+            <div class="persona-badge" id="persona-display">Caricamento...</div>
+            <h3 id="scenario-text" class="mb-4">...</h3>
+            
+            <div id="choices-container">
+                <!-- Scelte generate via JS -->
+            </div>
+
+            <div id="feedback-area"></div>
+
+            <div class="mt-4 d-flex justify-content-between">
+                <button class="btn btn-danger btn-sm" onclick="showFinalResults()">Concludi</button>
+                <button id="next-btn" class="btn btn-navy btn-sm" style="background:var(--navy); color:white; display:none;" onclick="nextScenario()">Prossimo Dilemma →</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="text-center py-4">
+    <p class="small text-muted">© Progetto Protestantesimo | <span onclick="toggleContacts()" style="cursor:pointer; color:var(--navy-light)">Contatti</span></p>
+    <div id="contact-info" style="display:none">
+        IG: lns_luca | TikTok: @lns_luca | lnsbusiness0@gmail.com
+    </div>
+</footer>
+
+<script>
+    const scenarios = [
+        {
+            p: "Martino Lutero (1521)",
+            s: "Sei alla Dieta di Worms. L'imperatore ti ordina di ritrattare i tuoi scritti per evitare il bando. Come rispondi?",
+            c: [
+                { t: "La mia coscienza è prigioniera della Parola di Dio. Non posso ritrattare nulla.", r: true },
+                { t: "Accetto di ritrattare le parti più dure per mantenere la pace nell'Impero.", r: false },
+                { t: "Chiedo scusa al Papa e mi sottometto alla tradizione della Chiesa.", r: false }
+            ]
+        },
+        {
+            p: "Giovanni Calvino (Ginevra)",
+            s: "Un cittadino sostiene che la salvezza dipenda esclusivamente dalle buone azioni umane. Come intervieni?",
+            c: [
+                { t: "Lo ignoro, la fede è una questione privata.", r: false },
+                { t: "Lo convoco davanti al Concistoro per correggere la sua eresia sulla predestinazione.", r: true },
+                { t: "Organizzo un dibattito pubblico basato sulla filosofia greca.", r: false }
+            ]
+        },
+        {
+            p: "Enrico VIII (1534)",
+            s: "Il Papa rifiuta di annullare il tuo matrimonio. Qual è la tua mossa politica definitiva?",
+            c: [
+                { t: "Dichiaro il Re unico Capo Supremo della Chiesa d'Inghilterra tramite un Atto.", r: true },
+                { t: "Abbandono il trono per amore di Caterina d'Aragona.", r: false },
+                { t: "Invado Roma per costringere il Papa a firmare.", r: false }
+            ]
+        },
+        {
+            p: "Huldrych Zwingli (Marburgo)",
+            s: "Incontri Lutero per unire le riforme. Lui dice che il pane 'è' il corpo di Cristo. Cosa ribatti?",
+            c: [
+                { t: "Concordo, dobbiamo essere uniti contro il Papa.", r: false },
+                { t: "È un puro simbolo. 'Questo è il mio corpo' significa 'Questo significa il mio corpo'.", r: true },
+                { t: "Sostengo che il pane si trasforma fisicamente nel corpo (Transustanziazione).", r: false }
+            ]
+        },
+        {
+            p: "Un Pastore Ugonotto (Francia)",
+            s: "È la notte di San Bartolomeo. I cattolici ti assaltano. Qual è il fondamento della tua resistenza?",
+            c: [
+                { t: "La difesa della libertà di coscienza basata sulla fede calvinista.", r: true },
+                { t: "Il desiderio di restaurare il paganesimo antico.", r: false },
+                { t: "La volontà di sottomettersi totalmente all'autorità del Re Cattolico.", r: false }
+            ]
+        },
+        {
+            p: "Martino Lutero (Rivolta dei Contadini)",
+            s: "I contadini insorgono citando la tua 'Libertà del Cristiano'. Qual è la tua posizione?",
+            c: [
+                { t: "Supporto i contadini contro i principi, la libertà è sociale.", r: false },
+                { t: "Condanno i ribelli: l'autorità politica va rispettata, la libertà è interiore.", r: true },
+                { t: "Resto neutrale e mi ritiro in un monastero.", r: false }
+            ]
+        },
+        {
+            p: "Thomas Cranmer (Inghilterra)",
+            s: "Stai scrivendo il Book of Common Prayer. Quale lingua scegli per la liturgia?",
+            c: [
+                { t: "Latino, per mantenere il legame con la tradizione romana.", r: false },
+                { t: "Inglese, affinché tutto il popolo possa comprendere la Parola.", r: true },
+                { t: "Greco antico, per tornare alle origini apostoliche.", r: false }
+            ]
+        },
+        {
+            p: "Un Puritano (Colonie Americane)",
+            s: "Stai fondando una nuova comunità. Qual è l'obiettivo principale?",
+            c: [
+                { t: "Creare una 'Città sulla collina', esempio di purezza biblica.", r: true },
+                { t: "Accumulare oro e ricchezze per la Corona.", r: false },
+                { t: "Costruire un tempio dedicato a santi e reliquie.", r: false }
+            ]
+        },
+        {
+            p: "Menno Simons (Anabattista)",
+            s: "Ti chiedono di prendere le armi per difendere la tua fede. Come rispondi?",
+            c: [
+                { t: "Il cristiano segue il pacifismo assoluto e non usa la spada.", r: true },
+                { t: "Organizzo un esercito di santi per conquistare la città.", r: false },
+                { t: "Mi arruolo nell'esercito imperiale.", r: false }
+            ]
+        },
+        {
+            p: "Giovanni Calvino (Caso Serveto)",
+            s: "Michele Serveto nega la Trinità a Ginevra. Come gestisci la situazione?",
+            c: [
+                { t: "Lo lascio libero di predicare, credo nella tolleranza assoluta.", r: false },
+                { t: "Appoggio la sua condanna per preservare l'ortodossia della città.", r: true },
+                { t: "Lo nomino mio successore al Concistoro.", r: false }
+            ]
+        }
+        // ... (Il sistema ne pesca 10 da questi o altri aggiunti)
+    ];
+
+    let sessionScenarios = [];
+    let currentIdx = 0;
+    let score = 0;
+    let answered = false;
+
+    function initGame() {
+        sessionScenarios = [...scenarios].sort(() => 0.5 - Math.random()).slice(0, 10);
+        showScenario();
+    }
+
+    function showScenario() {
+        answered = false;
+        const s = sessionScenarios[currentIdx];
+        document.getElementById('current-idx').innerText = currentIdx + 1;
+        document.getElementById('persona-display').innerText = s.p;
+        document.getElementById('scenario-text').innerText = s.s;
+        document.getElementById('next-btn').style.display = 'none';
+        document.getElementById('feedback-area').style.display = 'none';
+
+        const container = document.getElementById('choices-container');
+        container.innerHTML = "";
+
+        // Shuffle delle opzioni
+        const shuffledChoices = [...s.c].sort(() => 0.5 - Math.random());
+
+        shuffledChoices.forEach(choice => {
+            const btn = document.createElement('button');
+            btn.className = "choice-btn";
+            btn.innerText = choice.t;
+            btn.onclick = () => handleChoice(choice, btn);
+            container.appendChild(btn);
+        });
+    }
+
+    function handleChoice(choice, btn) {
+        if(answered) return;
+        answered = true;
+
+        if(choice.r) {
+            btn.classList.add('correct');
+            score += 10;
+            document.getElementById('score').innerText = score;
+        } else {
+            btn.classList.add('wrong');
+            // Mostra quella corretta
+            Array.from(document.querySelectorAll('.choice-btn')).forEach(b => {
+                const original = sessionScenarios[currentIdx].c.find(c => c.t === b.innerText);
+                if(original && original.r) b.classList.add('correct');
+            });
+        }
+
+        document.getElementById('next-btn').style.display = 'block';
+    }
+
+    function nextScenario() {
+        currentIdx++;
+        if(currentIdx < 10) {
+            showScenario();
+        } else {
+            showFinalResults();
+        }
+    }
+
+    function showFinalResults() {
+        const ui = document.getElementById('game-ui');
+        let comment = score >= 80 ? "Sei un vero Teologo della Riforma!" : (score >= 50 ? "Buona conoscenza storica." : "Dovresti ripassare i testi originali.");
+        ui.innerHTML = `
+            <div class="text-center py-5">
+                <h2 class="display-3 mb-3">${score}%</h2>
+                <h4>Livello Coerenza Storica</h4>
+                <p class="lead mt-3">${comment}</p>
+                <div class="d-grid gap-2 col-md-6 mx-auto mt-4">
+                    <button class="btn btn-dark" onclick="location.reload()">Ricomincia</button>
+                    <a href="minigiochi.html" class="btn btn-outline-secondary">Torna al Lab</a>
+                </div>
+            </div>
+        `;
+    }
+
+    function toggleContacts() {
+        const info = document.getElementById('contact-info');
+        info.style.display = info.style.display === 'none' ? 'block' : 'none';
+    }
+
+    initGame();
+</script>
+</body>
+</html>

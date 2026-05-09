@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mappa dell'Espansione | Knowledge Lab</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --avorio: #FBF9F1;
+            --navy: #112D4E;
+            --navy-light: #3F72AF;
+            --legno: #8B5E34;
+            --success: #28a745;
+            --danger: #dc3545;
+        }
+
+        body {
+            background-color: var(--avorio);
+            font-family: 'Montserrat', sans-serif;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, .navbar-brand { font-family: 'Lora', serif; }
+
+        .game-header {
+            background: var(--navy);
+            color: white;
+            padding: 2rem 0;
+            border-bottom: 4px solid var(--legno);
+            margin-bottom: 2rem;
+        }
+
+        .quiz-container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            border: 2px solid #eee;
+            background: white;
+            border-radius: 12px;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .option-btn:hover {
+            border-color: var(--navy-light);
+            background: #f8f9fa;
+        }
+
+        .option-btn.correct { background: var(--success) !important; color: white !important; border-color: var(--success) !important; }
+        .option-btn.wrong { background: var(--danger) !important; color: white !important; border-color: var(--danger) !important; }
+
+        .progress-bar-custom {
+            height: 8px;
+            background: #eee;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        #progress-fill {
+            height: 100%;
+            background: var(--legno);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .contact-link { color: #0d6efd; text-decoration: none; font-size: 0.85rem; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="game-header text-center">
+    <div class="container">
+        <a href="minigiochi.html" class="btn btn-outline-light btn-sm float-start mt-2">Abbandona</a>
+        <h1>Mappa dell'Espansione</h1>
+        <p class="mb-0">Geografia e diffusione della Riforma</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="quiz-container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="badge bg-dark">Domanda <span id="current-idx">1</span> / 12</span>
+            <span class="fw-bold" style="color: var(--navy)">Punti: <span id="current-score">0</span></span>
+        </div>
+        
+        <div class="progress-bar-custom">
+            <div id="progress-fill"></div>
+        </div>
+
+        <div id="game-content">
+            <h3 id="question-text" class="mb-4">Caricamento domanda...</h3>
+            <div id="options-container">
+                <!-- Opzioni generate da JS -->
+            </div>
+            <div class="mt-4 text-end">
+                <button class="btn btn-danger btn-sm" onclick="showResults()">Concludi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="text-center py-5">
+    <span class="contact-link" onclick="toggleContacts()">contatti</span>
+    <div id="contact-info" style="display:none" class="mt-3 small">
+        IG: lns_luca | TikTok: @lns_luca | lnsbusiness0@gmail.com
+    </div>
+</footer>
+
+<script>
+    const database = [
+        { q: "In quale città svizzera Giovanni Calvino stabilì la sua 'Repubblica dei Santi'?", a: ["Ginevra", "Zurigo", "Berna", "Basilea"], c: "Ginevra" },
+        { q: "Quale paese scandinavo fu tra i primi ad adottare il luteranesimo come religione di stato?", a: ["Svezia", "Finlandia", "Groenlandia", "Islanda"], c: "Svezia" },
+        { q: "Gli Ugonotti erano i calvinisti di quale nazione?", a: ["Francia", "Spagna", "Italia", "Ungheria"], c: "Francia" },
+        { q: "In quale regione storica della Germania Martino Lutero affisse le sue 95 tesi?", a: ["Sassonia", "Baviera", "Renania", "Westfalia"], c: "Sassonia" },
+        { q: "Dove trovarono rifugio i Padri Pellegrini (Puritani) prima di imbarcarsi per l'America?", a: ["Olanda", "Francia", "Irlanda", "Scozia"], c: "Olanda" },
+        { q: "Quale colonia americana fu fondata da William Penn per ospitare i Quaccheri?", a: ["Pennsylvania", "Virginia", "Georgia", "New York"], c: "Pennsylvania" },
+        { q: "In quale città si svolse la disputa tra Lutero e Zwingli sul significato dell'Eucarestia?", a: ["Marburgo", "Worms", "Augusta", "Trento"], c: "Marburgo" },
+        { q: "Il movimento dei Valdesi ha le sue radici storiche principali in quali valli?", a: ["Piemontesi", "Valtellinesi", "Aostane", "Orobiche"], c: "Piemontesi" },
+        { q: "In quale nazione europea la Riforma ebbe un forte carattere politico legato ai nobili 'Magiari'?", a: ["Ungheria", "Polonia", "Austria", "Grecia"], c: "Ungheria" },
+        { q: "Il Presbiterianesimo divenne la forma dominante di protestantesimo in quale paese?", a: ["Scozia", "Galles", "Irlanda", "Portogallo"], c: "Scozia" },
+        { q: "Dove fu fondata la Chiesa di Gesù Cristo dei Santi degli Ultimi Giorni (Mormoni)?", a: ["Stati Uniti", "Canada", "Regno Unito", "Australia"], c: "Stati Uniti" },
+        { q: "Quale città tedesca vide la rivolta e il regno anabattista di Giovanni di Leida (1534)?", a: ["Münster", "Berlino", "Monaco", "Francoforte"], c: "Münster" },
+        { q: "In quale paese del Sud America il movimento Pentecostale ha avuto la crescita più massiccia?", a: ["Brasile", "Argentina", "Cile", "Uruguay"], c: "Brasile" },
+        { q: "Quale isola del Mediterraneo fu un avamposto anglicano per secoli?", a: ["Malta", "Cipro", "Creta", "Corsica"], c: "Malta" },
+        { q: "In quale stato degli USA si trova oggi la sede mondiale della chiesa Mormone?", a: ["Utah", "California", "Texas", "Florida"], c: "Utah" },
+        { q: "La Pace di Augusta (1555) stabilì il principio 'Cuius regio, eius religio' in quale impero?", a: ["Sacro Romano Impero", "Impero Ottomano", "Regno di Francia", "Impero Russo"], c: "Sacro Romano Impero" },
+        { q: "Quale città scozzese fu il centro della predicazione di John Knox?", a: ["Edimburgo", "Glasgow", "Aberdeen", "Dundee"], c: "Edimburgo" },
+        { q: "In quale città Martin Lutero fu processato dall'imperatore Carlo V?", a: ["Worms", "Norimberga", "Praga", "Vienna"], c: "Worms" },
+        { q: "Dove nacque il movimento Metodista grazie a John Wesley?", a: ["Oxford", "Londra", "Cambridge", "Bristol"], c: "Oxford" },
+        { q: "Il movimento Giansenista ebbe il suo cuore pulsante nell'abbazia di Port-Royal, vicino a:", a: ["Parigi", "Lione", "Marsiglia", "Bordeaux"], c: "Parigi" }
+    ];
+
+    let currentQuestions = [];
+    let currentIndex = 0;
+    let score = 0;
+    let answered = false;
+
+    function initGame() {
+        // Pesca 12 domande random dal database
+        currentQuestions = [...database].sort(() => 0.5 - Math.random()).slice(0, 12);
+        showQuestion();
+    }
+
+    function showQuestion() {
+        answered = false;
+        const q = currentQuestions[currentIndex];
+        
+        // Mischia le opzioni ogni volta (Shuffle)
+        const shuffledOptions = [...q.a].sort(() => 0.5 - Math.random());
+        
+        document.getElementById('current-idx').innerText = currentIndex + 1;
+        document.getElementById('question-text').innerText = q.q;
+        document.getElementById('progress-fill').style.width = ((currentIndex / 12) * 100) + "%";
+        
+        const container = document.getElementById('options-container');
+        container.innerHTML = "";
+        
+        shuffledOptions.forEach((opt) => {
+            const btn = document.createElement('button');
+            btn.className = "option-btn";
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(opt, btn, q.c);
+            container.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selectedOpt, btn, correctValue) {
+        if(answered) return;
+        answered = true;
+        
+        if(selectedOpt === correctValue) {
+            btn.classList.add('correct');
+            score++;
+            document.getElementById('current-score').innerText = score;
+        } else {
+            btn.classList.add('wrong');
+            // Evidenzia quella corretta tra tutte
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(b => {
+                if(b.innerText === correctValue) b.classList.add('correct');
+            });
+        }
+
+        setTimeout(() => {
+            currentIndex++;
+            if(currentIndex < 12) {
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }, 1200);
+    }
+
+    function showResults() {
+        const content = document.getElementById('game-content');
+        let rank = score > 9 ? "Esperto Geografo" : (score > 5 ? "Studente Preparato" : "Novizio");
+        content.innerHTML = `
+            <div class="text-center py-4">
+                <h2 class="display-4 mb-3">${score} / 12</h2>
+                <p class="lead">Grado ottenuto: <strong>${rank}</strong></p>
+                <hr>
+                <div class="d-grid gap-2 col-md-6 mx-auto">
+                    <button class="btn btn-dark" onclick="location.reload()">Ricomincia</button>
+                    <a href="minigiochi.html" class="btn btn-outline-secondary">Torna al Lab</a>
+                </div>
+            </div>
+        `;
+    }
+
+    function toggleContacts() {
+        const info = document.getElementById('contact-info');
+        info.style.display = info.style.display === 'none' ? 'block' : 'none';
+    }
+
+    initGame();
+</script>
+</body>
+</html>

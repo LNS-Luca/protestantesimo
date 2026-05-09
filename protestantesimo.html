@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protestantesimo | Portale Storico</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --avorio: #FBF9F1;
+            --navy: #112D4E;
+            --navy-light: #3F72AF;
+            --legno: #8B5E34;
+            --accento-hover: #DBE2EF;
+        }
+
+        body {
+            background-color: var(--avorio);
+            font-family: 'Montserrat', sans-serif;
+            color: #333;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, .navbar-brand {
+            font-family: 'Lora', serif;
+        }
+
+        /* Navigazione */
+        .navbar {
+            background-color: transparent !important;
+            position: absolute;
+            width: 100%;
+            z-index: 10;
+            padding: 1.5rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            color: #fff !important;
+            font-size: 1.5rem;
+        }
+
+        /* Hero Section Migliorata */
+        .hero {
+            background: linear-gradient(135deg, var(--navy) 0%, #0a192f 100%);
+            color: white;
+            padding: 8rem 1rem 10rem 1rem;
+            text-align: center;
+            border-bottom: 5px solid var(--legno);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            font-weight: 300;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Container delle Scelte Principali */
+        .choices-container {
+            margin-top: -6rem; /* Fa sovrapporre le card all'header */
+            flex: 1;
+            padding-bottom: 4rem;
+        }
+
+        .main-choice {
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--navy);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            height: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-top: 4px solid transparent;
+        }
+
+        .main-choice:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            border-top: 4px solid var(--legno);
+            background-color: var(--accento-hover);
+            color: var(--navy);
+        }
+
+        .choice-icon {
+            font-size: 4rem;
+            color: var(--navy-light);
+            margin-bottom: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .main-choice:hover .choice-icon {
+            color: var(--legno);
+        }
+
+        .main-choice h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .main-choice p {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Footer Contatti */
+        footer {
+            margin-top: auto;
+            padding: 2rem 0;
+            background-color: transparent;
+        }
+
+        .contact-link {
+            color: #0d6efd;
+            text-decoration: none;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .contact-link:hover {
+            opacity: 0.7;
+        }
+
+        #contact-info {
+            display: none;
+            margin-top: 1.5rem;
+            animation: slideDown 0.4s ease forwards;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .social-link {
+            color: var(--navy);
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .social-link:hover {
+            color: var(--navy-light);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="container justify-content-center">
+        <a class="navbar-brand" href="Protestantesimo.html"><i class="bi bi-bank2 me-2"></i> PROTESTANTESIMO</a>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<header class="hero">
+    <div class="container">
+        <h1>Esplora la Riforma</h1>
+        <p>Dalle 95 tesi di Wittemberg alle correnti globali contemporanee: un viaggio interattivo nella teologia e nella storia.</p>
+    </div>
+</header>
+
+<!-- Main Choices (Sovrapposte) -->
+<main class="choices-container container">
+    <div class="row g-5 justify-content-center">
+        <!-- Collegamento corretto alla pagina del Catalogo -->
+        <div class="col-md-5">
+            <a href="catalogo.html" class="main-choice">
+                <i class="bi bi-journals choice-icon"></i>
+                <h3>Catalogo Movimenti</h3>
+                <p>Consulta il database cronologico completo. Scopri autori, date e mappe della diffusione di ogni singola corrente.</p>
+            </a>
+        </div>
+
+        <!-- Collegamento corretto alla pagina dei Minigiochi -->
+        <div class="col-md-5">
+            <a href="minigiochi.html" class="main-choice">
+                <i class="bi bi-controller choice-icon"></i>
+                <h3>Knowledge Lab</h3>
+                <p>Metti alla prova la tua memoria e logica storica con minigiochi interattivi e sfide teologiche strutturate.</p>
+            </a>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="text-center">
+    <div class="container">
+        <!-- Bottone piccolo in blu per i contatti -->
+        <span class="contact-link" onclick="toggleContacts()">contatti</span>
+        
+        <!-- Dettagli contatti nascosti -->
+        <div id="contact-info">
+            <div class="d-flex justify-content-center align-items-center flex-wrap">
+                <a href="https://www.instagram.com/lns_luca" target="_blank" class="social-link">
+                    <i class="bi bi-instagram fs-5 align-middle me-1"></i> lns_luca
+                </a>
+                <a href="https://www.tiktok.com/@lns_luca" target="_blank" class="social-link">
+                    <i class="bi bi-tiktok fs-5 align-middle me-1"></i> @lns_luca
+                </a>
+                <a href="mailto:lnsbusiness0@gmail.com" class="social-link">
+                    <i class="bi bi-envelope-fill fs-5 align-middle me-1"></i> lnsbusiness0@gmail.com
+                </a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Script per i contatti -->
+<script>
+    function toggleContacts() {
+        const info = document.getElementById('contact-info');
+        if (info.style.display === 'block') {
+            info.style.display = 'none';
+        } else {
+            info.style.display = 'block';
+            // Scrolla leggermente in basso per far vedere i contatti se si è su schermi piccoli
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

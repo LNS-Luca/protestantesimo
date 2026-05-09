@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Lab | Selezione Sfida</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --avorio: #FBF9F1;
+            --navy: #112D4E;
+            --navy-light: #3F72AF;
+            --legno: #8B5E34;
+            --accento-hover: #DBE2EF;
+        }
+
+        body {
+            background-color: var(--avorio);
+            font-family: 'Montserrat', sans-serif;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1, h2, h3, .navbar-brand { font-family: 'Lora', serif; }
+
+        .navbar {
+            background-color: transparent !important;
+            padding: 1.5rem 0;
+        }
+
+        .navbar-brand { color: var(--navy) !important; font-weight: 600; }
+
+        .hero-lab {
+            text-align: center;
+            padding: 4rem 1rem 3rem 1rem;
+        }
+
+        .hero-lab h1 {
+            font-size: 3rem;
+            color: var(--navy);
+            margin-bottom: 1rem;
+        }
+
+        /* Card di Selezione Gioco */
+        .game-card {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            text-align: center;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.4s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 5px;
+            background: var(--legno);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .game-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(17, 45, 78, 0.15);
+        }
+
+        .game-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .game-icon {
+            font-size: 4rem;
+            color: var(--navy-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .game-card h3 {
+            color: var(--navy);
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .game-card p {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .badge-difficulty {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 0.7rem;
+            padding: 5px 12px;
+            border-radius: 50px;
+            background: var(--accento-hover);
+            color: var(--navy);
+            font-weight: 600;
+        }
+
+        footer { padding: 2rem 0; margin-top: auto; }
+        .contact-link { color: #0d6efd; text-decoration: none; font-size: 0.85rem; cursor: pointer; }
+        #contact-info { display: none; margin-top: 1.5rem; }
+        .social-link { color: var(--navy); text-decoration: none; margin: 0 15px; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="container">
+        <a class="navbar-brand" href="Protestantesimo.html">
+            <i class="bi bi-arrow-left me-2"></i> Menu Principale
+        </a>
+    </div>
+</nav>
+
+<!-- Header -->
+<header class="hero-lab">
+    <div class="container">
+        <h1>Knowledge Lab</h1>
+        <p class="lead">Seleziona una sfida per verificare le tue conoscenze sulla Riforma.</p>
+    </div>
+</header>
+
+<!-- Selezione Giochi -->
+<main class="container mb-5">
+    <div class="row g-4 justify-content-center">
+        
+        <!-- Gioco 1 -->
+        <div class="col-md-4">
+            <a href="gioco-linee.html" class="game-card">
+                <span class="badge-difficulty">LOGICA DOTTRINALE</span>
+                <i class="bi bi-diagram-3 game-icon"></i>
+                <h3>Linee di Fede</h3>
+                <p>Collega 15 dogmi e concetti chiave ai loro rispettivi padri teologici. Richiede precisione sui dettagli delle "Sola".</p>
+            </a>
+        </div>
+
+        <!-- Gioco 2 -->
+        <div class="col-md-4">
+            <a href="gioco-mappa.html" class="game-card">
+                <span class="badge-difficulty">GEOGRAFIA STORICA</span>
+                <i class="bi bi-globe-europe-africa game-icon"></i>
+                <h3>Mappa dell'Espansione</h3>
+                <p>Un quiz geografico di 12 domande. Identifica i centri nevralgici della Riforma e la loro diffusione nei secoli.</p>
+            </a>
+        </div>
+
+        <!-- Gioco 3 -->
+        <div class="col-md-4">
+            <a href="gioco-dilemma.html" class="game-card">
+                <span class="badge-difficulty">SIMULAZIONE</span>
+                <i class="bi bi-chat-quote game-icon"></i>
+                <h3>Dilemma del Riformatore</h3>
+                <p>Affronta 10 situazioni critiche. Scegli come rispondere alle autorità basandoti sulla coerenza teologica del leader scelto.</p>
+            </a>
+        </div>
+
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="text-center">
+    <div class="container">
+        <span class="contact-link" onclick="toggleContacts()">contatti</span>
+        <div id="contact-info">
+            <div class="d-flex justify-content-center align-items-center flex-wrap">
+                <a href="https://www.instagram.com/lns_luca" target="_blank" class="social-link"><i class="bi bi-instagram me-1"></i> lns_luca</a>
+                <a href="https://www.tiktok.com/@lns_luca" target="_blank" class="social-link"><i class="bi bi-tiktok me-1"></i> @lns_luca</a>
+                <a href="mailto:lnsbusiness0@gmail.com" class="social-link"><i class="bi bi-envelope-fill me-1"></i> lnsbusiness0@gmail.com</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    function toggleContacts() {
+        const info = document.getElementById('contact-info');
+        info.style.display = info.style.display === 'block' ? 'none' : 'block';
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

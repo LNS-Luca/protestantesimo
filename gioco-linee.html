@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linee di Fede | Knowledge Lab</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --avorio: #FBF9F1;
+            --navy: #112D4E;
+            --navy-light: #3F72AF;
+            --legno: #8B5E34;
+            --success: #28a745;
+        }
+
+        body {
+            background-color: var(--avorio);
+            font-family: 'Montserrat', sans-serif;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        h1, h2, .navbar-brand { font-family: 'Lora', serif; }
+
+        .game-header {
+            background: var(--navy);
+            color: white;
+            padding: 2rem 0;
+            border-bottom: 4px solid var(--legno);
+            margin-bottom: 3rem;
+        }
+
+        .drag-container {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            min-height: 400px;
+        }
+
+        .concept-card {
+            background: var(--navy-light);
+            color: white;
+            padding: 10px 15px;
+            margin: 8px;
+            border-radius: 8px;
+            cursor: grab;
+            display: inline-block;
+            font-size: 0.9rem;
+            user-select: none;
+            transition: transform 0.2s;
+        }
+
+        .concept-card:active { cursor: grabbing; transform: scale(1.05); }
+
+        .drop-target {
+            background: #fff;
+            border: 2px dashed var(--navy-light);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            min-height: 150px;
+            transition: all 0.3s;
+        }
+
+        .drop-target.over {
+            background: var(--accento-hover);
+            border-color: var(--legno);
+            transform: scale(1.02);
+        }
+
+        .drop-target h4 {
+            color: var(--navy);
+            border-bottom: 2px solid var(--legno);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .score-box {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--navy);
+        }
+
+        .contact-link { color: #0d6efd; text-decoration: none; font-size: 0.85rem; cursor: pointer; }
+        #contact-info { display: none; margin-top: 1.5rem; }
+    </style>
+</head>
+<body>
+
+<div class="game-header text-center">
+    <div class="container">
+        <a href="minigiochi.html" class="btn btn-outline-light btn-sm float-start mt-2">Indietro</a>
+        <h1>Linee di Fede</h1>
+        <p class="mb-0">Trascina i concetti verso il leader teologico corretto.</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-6">
+            <div class="score-box">Progresso: <span id="current-count">0</span> / 15</div>
+        </div>
+        <div class="col-md-6 text-end">
+            <button class="btn btn-danger btn-sm" onclick="finishGame()">Concludi Minigioco</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Area dei concetti da trascinare -->
+        <div class="col-lg-4 mb-4">
+            <h5 class="fw-bold mb-3">Concetti da associare:</h5>
+            <div id="source-container" class="drag-container d-flex flex-wrap align-content-start">
+                <!-- Generato da JS -->
+            </div>
+        </div>
+
+        <!-- Zone di rilascio (Target) -->
+        <div class="col-lg-8">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="drop-target" data-leader="Lutero" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+                        <h4>Martino Lutero</h4>
+                        <div class="dropped-items d-flex flex-wrap"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="drop-target" data-leader="Calvino" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+                        <h4>Giovanni Calvino</h4>
+                        <div class="dropped-items d-flex flex-wrap"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="drop-target" data-leader="EnricoVIII" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+                        <h4>Enrico VIII</h4>
+                        <div class="dropped-items d-flex flex-wrap"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="drop-target" data-leader="Zwingli" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+                        <h4>Huldrych Zwingli</h4>
+                        <div class="dropped-items d-flex flex-wrap"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Risultato -->
+<div class="modal fade" id="resultModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-4">
+            <h2 id="result-title"></h2>
+            <p id="result-text" class="lead"></p>
+            <div class="d-grid gap-2">
+                <button class="btn btn-navy color-white" style="background: var(--navy); color:white" onclick="location.reload()">Riprova (Nuovi Concetti)</button>
+                <a href="minigiochi.html" class="btn btn-outline-secondary">Torna al Lab</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="text-center py-5">
+    <span class="contact-link" onclick="toggleContacts()">contatti</span>
+    <div id="contact-info">
+        <p class="small">IG: lns_luca | TikTok: @lns_luca | Email: lnsbusiness0@gmail.com</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const database = [
+        { id: 1, text: "95 Tesi di Wittemberg", leader: "Lutero" },
+        { id: 2, text: "Sola Fide", leader: "Lutero" },
+        { id: 3, text: "Traduzione Bibbia in Tedesco", leader: "Lutero" },
+        { id: 4, text: "Sacerdozio Universale", leader: "Lutero" },
+        { id: 5, text: "Consustanziazione", leader: "Lutero" },
+        { id: 6, text: "Istituzione della religione cristiana", leader: "Calvino" },
+        { id: 7, text: "Doppia Predestinazione", leader: "Calvino" },
+        { id: 8, text: "Concistoro di Ginevra", leader: "Calvino" },
+        { id: 9, text: "Lavoro come vocazione (Beruf)", leader: "Calvino" },
+        { id: 10, text: "Ugonotti", leader: "Calvino" },
+        { id: 11, text: "Atto di Supremazia", leader: "EnricoVIII" },
+        { id: 12, text: "Capo Supremo della Chiesa", leader: "EnricoVIII" },
+        { id: 13, text: "Scioglimento dei Monasteri", leader: "EnricoVIII" },
+        { id: 14, text: "Book of Common Prayer (origini)", leader: "EnricoVIII" },
+        { id: 15, text: "Difensore della Fede (titolo)", leader: "EnricoVIII" },
+        { id: 16, text: "Disputa di Marburgo", leader: "Zwingli" },
+        { id: 17, text: "Eucarestia come puro simbolo", leader: "Zwingli" },
+        { id: 18, text: "Rimozione immagini dalle chiese", leader: "Zwingli" },
+        { id: 19, text: "Riforma di Zurigo", leader: "Zwingli" },
+        { id: 20, text: "Morte nella battaglia di Kappel", leader: "Zwingli" },
+        { id: 21, text: "Sola Scriptura", leader: "Lutero" },
+        { id: 22, text: "Contro il celibato ecclesiastico", leader: "Lutero" },
+        { id: 23, text: "Teocrazia di Ginevra", leader: "Calvino" },
+        { id: 24, text: "Puritanesimo (origini teologiche)", leader: "Calvino" },
+        { id: 25, text: "Annullamento matrimonio Caterina d'Aragona", leader: "EnricoVIII" },
+        { id: 26, text: "Thomas Cranmer", leader: "EnricoVIII" },
+        { id: 27, text: "Abolizione della Messa", leader: "Zwingli" },
+        { id: 28, text: "Commentarius de vera et falsa religione", leader: "Zwingli" },
+        { id: 29, text: "Dieta di Worms", leader: "Lutero" },
+        { id: 30, text: "Grazia Irresistibile", leader: "Calvino" }
+    ];
+
+    let currentSession = [];
+    let score = 0;
+    let placed = 0;
+
+    function initGame() {
+        // Randomizza 15 concetti dal database di 30
+        const shuffled = database.sort(() => 0.5 - Math.random());
+        currentSession = shuffled.slice(0, 15);
+        
+        const container = document.getElementById('source-container');
+        currentSession.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'concept-card';
+            div.draggable = true;
+            div.id = `item-${item.id}`;
+            div.innerText = item.text;
+            div.setAttribute('data-leader', item.leader);
+            div.ondragstart = (ev) => ev.dataTransfer.setData("text", ev.target.id);
+            container.appendChild(div);
+        });
+    }
+
+    function allowDrop(ev) { ev.preventDefault(); }
+    function dragEnter(ev) { ev.currentTarget.classList.add('over'); }
+    function dragLeave(ev) { ev.currentTarget.classList.remove('over'); }
+
+    function drop(ev) {
+        ev.preventDefault();
+        const target = ev.currentTarget;
+        target.classList.remove('over');
+        
+        const id = ev.dataTransfer.getData("text");
+        const element = document.getElementById(id);
+        const correctLeader = element.getAttribute('data-leader');
+        const targetLeader = target.getAttribute('data-leader');
+
+        if(correctLeader === targetLeader) {
+            score++;
+            target.querySelector('.dropped-items').appendChild(element);
+            element.draggable = false;
+            element.style.background = "#28a745";
+        } else {
+            alert("Associazione errata! Rifletti sulla dottrina del leader.");
+            return;
+        }
+
+        placed++;
+        document.getElementById('current-count').innerText = placed;
+        if(placed === 15) finishGame();
+    }
+
+    function finishGame() {
+        const modal = new bootstrap.Modal(document.getElementById('resultModal'));
+        document.getElementById('result-title').innerText = placed === 15 ? "Ottimo Lavoro!" : "Sessione Conclusa";
+        document.getElementById('result-text').innerText = `Hai associato correttamente ${score} concetti su 15 totali estratti.`;
+        modal.show();
+    }
+
+    function toggleContacts() {
+        const info = document.getElementById('contact-info');
+        info.style.display = info.style.display === 'block' ? 'none' : 'block';
+    }
+
+    initGame();
+</script>
+</body>
+</html>
